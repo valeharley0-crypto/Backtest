@@ -24,7 +24,20 @@ button.pri{background:linear-gradient(90deg,var(--b),#3a5bff);border-color:var(-
 .k b{font-size:20px;font-weight:800}
 .bl{color:var(--b);text-shadow:0 0 10px rgba(0,123,255,.6)}
 .rd{color:var(--r);text-shadow:0 0 10px rgba(255,7,58,.6)}
-.rk{max-width:200px;margin-bottom:12px}
+.opts{display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap}.opts label{width:150px}
+select{font:inherit;font-size:16px;color:var(--tx);background:#000;border:1px solid var(--line);border-radius:8px;padding:8px;width:100%}
+.rings{display:flex;gap:10px;margin-bottom:10px}
+.rg{position:relative;flex:1;max-width:170px;aspect-ratio:1}
+.rg svg{width:100%;height:100%}
+.ct{position:absolute;top:0;left:0;right:0;bottom:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+.ct b{font-size:20px;font-weight:800}.ct small{color:var(--mut);font-size:10px;text-transform:uppercase}
+.ch.z{background:rgba(127,138,163,.12);border-color:rgba(127,138,163,.5)}.z em{color:var(--mut)}.z .bd{background:#59627a}
+.seg{flex-wrap:wrap}.seg button{padding:8px 6px;min-width:56px}
+.stg{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:8px;margin-top:14px}
+.st{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px 12px}
+.st h3{margin:0 0 6px;font-size:12px;color:var(--mut);text-transform:uppercase;letter-spacing:.6px}
+.sr{display:grid;grid-template-columns:1fr auto auto auto;gap:10px;font-size:12px;padding:4px 0;border-top:1px solid var(--line)}
+.eq{width:100%;height:110px;display:block}
 .cal{display:grid;grid-template-columns:repeat(7,1fr) 76px;gap:4px}
 .dh{color:var(--mut);font-size:11px;text-align:center;padding:4px 0;text-transform:uppercase}
 .c{min-height:96px;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:5px;cursor:pointer;display:flex;flex-direction:column;gap:4px;min-width:0}
@@ -68,10 +81,12 @@ input:focus{outline:none;border-color:var(--b);box-shadow:0 0 10px rgba(0,123,25
 <h1>JOURNAL DE TRADES</h1>
 <div class="nav"><button id="pm">‹</button><span id="ml"></span><button id="nm">›</button><button id="td">Aujourd’hui</button><button id="add" class="pri">+ Trade</button></div>
 </header>
+<div class="rings" id="rings"></div>
 <div class="sum" id="sum"></div>
-<label class="rk">Risque par trade ($)<input id="rk" inputmode="decimal" placeholder="ex. 100"></label>
+<div class="opts"><label>Risque / trade ($) → P/L en $<input id="rk" inputmode="decimal" placeholder="ex. 100"></label><label>Positions<select id="ps"><option value="2">2 positions</option><option value="1">1 position</option></select></label></div>
 <div class="cal" id="cal"></div>
-<p class="ft">R calculé : SL = −1R · TP1+BE = RR1 ÷ 2 · TP2 = (RR1 + RR2) ÷ 2 (2 positions à parts égales). Les trades sont enregistrés sur cet appareil.</p>
+<div class="stg" id="stg"></div>
+<p class="ft">R calculé : SL = −1R · BE = 0R · TP1 = RR1 · 2 positions : TP1+BE = RR1 ÷ 2, TP2 = (RR1 + RR2) ÷ 2 · 1 position : TP2 = RR2. Les trades sont enregistrés sur cet appareil.</p>
 </div>
 
 <div class="ov" id="ov" hidden><div class="md">
@@ -83,8 +98,14 @@ input:focus{outline:none;border-color:var(--b);box-shadow:0 0 10px rgba(0,123,25
 <label>SL<input id="fs" inputmode="decimal"></label>
 <label>TP1<input id="f1" inputmode="decimal"></label>
 <label>TP2<input id="f2" inputmode="decimal"></label>
+<label>Session<select id="fss"><option>Londres</option><option>New York</option><option>Asie</option></select></label>
+<label>Setup<input id="fsu" list="sups" placeholder="OB, FVG…"></label>
+<label>Erreur<input id="fer" list="ers" placeholder="Aucune"></label>
+<label>Note<input id="fn"></label>
+<datalist id="sups"><option value="OB"><option value="FVG"><option value="Breaker"><option value="Mitigation"><option value="IFVG"><option value="Liquidity sweep"></datalist>
+<datalist id="ers"><option value="Aucune"><option value="FOMO"><option value="Revenge trade"><option value="SL déplacé"><option value="Entrée trop tôt"><option value="Hors plan"></datalist>
 </div>
-<div class="seg" id="seg"><button type="button" data-r="TP2">TP2</button><button type="button" data-r="BE">TP1+BE</button><button type="button" data-r="SL">SL</button></div>
+<div class="seg" id="seg"><button type="button" data-r="TP2">TP2</button><button type="button" data-r="BE">TP1+BE</button><button type="button" data-r="TP1">TP1</button><button type="button" data-r="B0">BE</button><button type="button" data-r="SL">SL</button></div>
 <label>Lien capture<input id="fl" placeholder="https://www.tradingview.com/x/…"></label>
 <div class="pv" id="pv"></div>
 <div class="act"><button type="button" id="del">Supprimer</button><button type="button" id="cx">Annuler</button><button type="button" id="save" class="pri">Enregistrer</button></div>
@@ -93,12 +114,12 @@ input:focus{outline:none;border-color:var(--b);box-shadow:0 0 10px rgba(0,123,25
 
 <script>
 const MO=["Janvier","Février","Mars","Avril","Mai","Juin","Juillet","Août","Septembre","Octobre","Novembre","Décembre"];
-const LB={TP2:"TP2",BE:"TP1+BE",SL:"SL"};
+const LB={TP2:"TP2",BE:"TP1+BE",TP1:"TP1",B0:"BE",SL:"SL"};
 const $=s=>document.querySelector(s);
-let T=[],risk=0,cur=new Date(),editId=null,res="TP2",delArm=false;
+let T=[],risk=0,pos=2,tpos=2,cur=new Date(),editId=null,res="TP2",delArm=false;
 cur=new Date(cur.getFullYear(),cur.getMonth(),1);
-try{T=JSON.parse(localStorage.getItem("jt.trades")||"[]");risk=parseFloat(localStorage.getItem("jt.risk"))||0}catch(e){}
-const store=()=>{try{localStorage.setItem("jt.trades",JSON.stringify(T));localStorage.setItem("jt.risk",risk)}catch(e){}};
+try{T=JSON.parse(localStorage.getItem("jt.trades")||"[]");risk=parseFloat(localStorage.getItem("jt.risk"))||0;pos=+localStorage.getItem("jt.pos")||2}catch(e){}
+const store=()=>{try{localStorage.setItem("jt.trades",JSON.stringify(T));localStorage.setItem("jt.risk",risk);localStorage.setItem("jt.pos",pos)}catch(e){}};
 const num=v=>{const n=parseFloat(String(v).replace(",","."));return isFinite(n)?n:null};
 const iso=d=>d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
@@ -115,14 +136,14 @@ function calc(t){
   const rr=x=>(dir==="BUY"?x-e:e-x)/rk;
   const rr1=rr(a),rr2=rr(b);
   if(rr1<=0||rr2<=0)return{err:"Un TP est du mauvais côté de l’entry."};
-  const R=t.res==="SL"?-1:t.res==="BE"?rr1/2:(rr1+rr2)/2;
+  const R={SL:-1,B0:0,TP1:rr1,BE:rr1/2,TP2:(t.pos||2)===2?(rr1+rr2)/2:rr2}[t.res];
   return{dir,rk,rr1,rr2,R};
 }
 
 const chip=x=>{
-  const t=x.t,c=x.c,g=c.R>0;
+  const t=x.t,c=x.c,g=c.R>0?"g":c.R<0?"l":"z";
   const lk=/^https?:\/\//i.test(t.link||"")?`<a href="${esc(t.link)}" target="_blank" rel="noopener">↗ capture</a>`:"";
-  return `<div class="ch ${g?"g":"l"}" data-id="${t.id}"><b>${esc(t.pair)}</b><em>${fR(c.R)}${risk?` <small>${fD(c.R*risk)}</small>`:""}</em><span class="bd">${LB[t.res]}</span>${lk}</div>`;
+  return `<div class="ch ${g}" data-id="${t.id}"><b>${esc(t.pair)}</b><em>${fR(c.R)}${risk?` <small>${fD(c.R*risk)}</small>`:""}</em><span class="bd">${LB[t.res]}</span>${lk}</div>`;
 };
 
 function render(){
@@ -135,8 +156,9 @@ function render(){
   const gp=M.filter(x=>x.c.R>0).reduce((a,x)=>a+x.c.R,0),gl=-M.filter(x=>x.c.R<0).reduce((a,x)=>a+x.c.R,0);
   const cnt=r=>M.filter(x=>x.t.res===r).length;
   const avg=n?M.reduce((a,x)=>a+x.c.rr2,0)/n:0;
-  const K=(l,v,c="")=>`<div class="k"><small>${l}</small><b class="${c}">${v}</b></div>`;
-  $("#sum").innerHTML=K("Trades",n)+K("Win rate",n?Math.round(w/n*100)+"%":"—","bl")+K("TP2",cnt("TP2"),"bl")+K("TP1+BE",cnt("BE"),"bl")+K("SL",cnt("SL"),"rd")+K("Total R",fR(sum),sum>=0?"bl":"rd")+K("RR moyen",n?"1:"+avg.toFixed(1):"—")+K("Profit factor",gl>0?(gp/gl).toFixed(2):gp>0?"∞":"—")+(risk?K("Total $",fD(sum*risk),sum>=0?"bl":"rd"):"");
+  const PL=risk?fD(sum*risk):fR(sum);const K=(l,v,c="")=>`<div class="k"><small>${l}</small><b class="${c}">${v}</b></div>`;
+  $("#sum").innerHTML=K("Trades",n)+K("TP2",cnt("TP2"),"bl")+K("TP1+BE",cnt("BE"),"bl")+K("TP1",cnt("TP1"),"bl")+K("BE",cnt("B0"))+K("SL",cnt("SL"),"rd")+K("P/L",PL,sum>=0?"bl":"rd")+K("RR moyen",n?"1:"+avg.toFixed(1):"—")+K("Profit factor",gl>0?(gp/gl).toFixed(2):gp>0?"∞":"—");
+  stats(M,sum,gp,gl,w,n);
   const off=new Date(y,m,1).getDay(),days=new Date(y,m+1,0).getDate(),wk=Math.ceil((off+days)/7),td=iso(new Date());
   let h=["Dim","Lun","Mar","Mer","Jeu","Ven","Sam","Sem."].map(d=>`<div class="dh">${d}</div>`).join("");
   for(let r=0;r<wk;r++){
@@ -149,15 +171,27 @@ function render(){
     h+=`<div class="wk"><span>S${r+1}</span>${wn?`<b class="${wr>=0?"bl":"rd"}">${fR(wr)}</b><span>${wn} trade${wn>1?"s":""}</span>`:"<span>—</span>"}</div>`;
   }
   $("#cal").innerHTML=h;
-  $("#rk").value=risk||"";
+  $("#rk").value=risk||"";$("#ps").value=pos;
 }
 
-function read(){return{date:$("#fd").value,pair:$("#fp").value.trim().toUpperCase()||"—",entry:num($("#fe").value),sl:num($("#fs").value),tp1:num($("#f1").value),tp2:num($("#f2").value),res,link:$("#fl").value.trim()}}
+function stats(M,sum,gp,gl,w,n){
+  const B="#007BFF",R="#FF073A",be=M.filter(x=>x.c.R===0).length,pc=k=>n?k/n*100:0,tg=gp+gl,pp=tg?gp/tg*100:0;
+  const ring=(s,c,l)=>{let o=25,a="";s.forEach(([p,col])=>{if(p>0)a+=`<circle cx="18" cy="18" r="15.9155" fill="none" stroke="${col}" stroke-width="3.2" stroke-dasharray="${p} ${100-p}" stroke-dashoffset="${o}" style="filter:drop-shadow(0 0 1.5px ${col})"/>`;o-=p});return `<div class="rg"><svg viewBox="0 0 36 36"><circle cx="18" cy="18" r="15.9155" fill="none" stroke="#182033" stroke-width="3.2"/>${a}</svg><div class="ct"><b>${c}</b><small>${l}</small></div></div>`};
+  $("#rings").innerHTML=ring([[pc(w),B],[pc(be),"#59627a"],[pc(n-w-be),R]],n?Math.round(w/n*100)+"%":"—","Win rate")+ring([[pp,B],[tg?100-pp:0,R]],n?(risk?fD(sum*risk):fR(sum)):"—","P/L");
+  const sr=L=>L.reduce((a,x)=>a+x.c.R,0),DN=["Dim","Lun","Mar","Mer","Jeu","Ven","Sam"],DS=["Lun","Mar","Mer","Jeu","Ven","Sam","Dim"],SS=["Asie","Londres","New York"];
+  const g=(kf,ord)=>{const o={};M.forEach(x=>{const k=kf(x);if(k)(o[k]=o[k]||[]).push(x)});return Object.keys(o).sort(ord?(a,b)=>ord.indexOf(a)-ord.indexOf(b):(a,b)=>sr(o[b])-sr(o[a])).map(k=>{const L=o[k],r=sr(L);return `<div class="sr"><span>${esc(k)}</span><span>${L.length}t</span><span>${Math.round(L.filter(x=>x.c.R>0).length/L.length*100)}%</span><b class="${r>=0?"bl":"rd"}">${fR(r)}</b></div>`}).join("")||`<span style="color:var(--mut);font-size:12px">—</span>`};
+  const S=[...M].sort((a,b)=>a.t.date<b.t.date?-1:a.t.date>b.t.date?1:0);let cum=0;const P=[0].concat(S.map(x=>cum+=x.c.R));
+  const mx=Math.max(...P,0),mn=Math.min(...P,0),sp=(mx-mn)||1,Y=v=>6+(mx-v)/sp*88,col=P[P.length-1]>=0?B:R;
+  const pts=P.map((v,i)=>(P.length>1?i*300/(P.length-1):0).toFixed(1)+","+Y(v).toFixed(1)).join(" ");
+  const eq=n?`<svg class="eq" viewBox="0 0 300 100" preserveAspectRatio="none"><line x1="0" x2="300" y1="${Y(0)}" y2="${Y(0)}" stroke="#2a3350" stroke-dasharray="3 3"/><polyline points="${pts}" fill="none" stroke="${col}" stroke-width="2" vector-effect="non-scaling-stroke" style="filter:drop-shadow(0 0 3px ${col})"/></svg>`:`<span style="color:var(--mut);font-size:12px">—</span>`;
+  $("#stg").innerHTML=`<div class="st"><h3>Courbe de R · ${fR(P[P.length-1])}</h3>${eq}</div><div class="st"><h3>Par session</h3>${g(x=>x.t.ses,SS)}</div><div class="st"><h3>Par jour</h3>${g(x=>DN[new Date(x.t.date+"T00:00").getDay()],DS)}</div><div class="st"><h3>Par setup</h3>${g(x=>x.t.setup)}</div><div class="st"><h3>Erreurs</h3>${g(x=>x.t.err&&!/^aucune$/i.test(x.t.err)?x.t.err:null)}</div>`;
+}
+function read(){return{date:$("#fd").value,pair:$("#fp").value.trim().toUpperCase()||"—",entry:num($("#fe").value),sl:num($("#fs").value),tp1:num($("#f1").value),tp2:num($("#f2").value),res,link:$("#fl").value.trim(),pos:tpos,ses:$("#fss").value,setup:$("#fsu").value.trim(),err:$("#fer").value.trim(),note:$("#fn").value.trim()}}
 function pv(){
   const c=calc(read());
   $("#pv").innerHTML=!c?`<span style="color:var(--mut)">Entre Entry, SL et TP pour voir le RR.</span>`:c.err?`<span class="rd">${c.err}</span>`:`<b>${c.dir}</b> · Risque ${c.rk.toFixed(2)} · RR TP1 1:${c.rr1.toFixed(2)} · RR TP2 1:${c.rr2.toFixed(2)}<br>Résultat : <b class="${c.R>0?"bl":"rd"}">${fR(c.R)}</b>${risk?` (${fD(c.R*risk)})`:""}`;
 }
-function setRes(r){res=r;document.querySelectorAll("#seg button").forEach(b=>b.classList.toggle("on",b.dataset.r===r));pv()}
+function setRes(r){if(tpos===1&&r==="BE")r="TP1";res=r;document.querySelector('#seg [data-r="BE"]').hidden=tpos===1;document.querySelectorAll("#seg button").forEach(b=>b.classList.toggle("on",b.dataset.r===r));pv()}
 function openM(date,id){
   editId=id||null;delArm=false;
   const t=id?T.find(x=>x.id===id):null;
@@ -165,7 +199,7 @@ function openM(date,id){
   $("#fd").value=t?t.date:(date||iso(new Date()));
   $("#fp").value=t?t.pair:"XAUUSD";
   [["#fe","entry"],["#fs","sl"],["#f1","tp1"],["#f2","tp2"]].forEach(([s,k])=>$(s).value=t&&t[k]!=null?t[k]:"");
-  $("#fl").value=t?t.link||"":"";
+  $("#fl").value=t?t.link||"":"";tpos=t?(t.pos||2):pos;$("#fss").value=t?t.ses||"Londres":"Londres";$("#fsu").value=t?t.setup||"":"";$("#fer").value=t?t.err||"":"";$("#fn").value=t?t.note||"":"";
   $("#del").hidden=!t;$("#del").textContent="Supprimer";
   $("#ov").hidden=false;
   setRes(t?t.res:"TP2");
@@ -184,6 +218,7 @@ $("#nm").onclick=()=>{cur=new Date(cur.getFullYear(),cur.getMonth()+1,1);render(
 $("#td").onclick=()=>{const n=new Date();cur=new Date(n.getFullYear(),n.getMonth(),1);render()};
 $("#add").onclick=()=>openM(iso(new Date()));
 $("#rk").onchange=e=>{risk=num(e.target.value)||0;store();render()};
+$("#ps").onchange=e=>{pos=+e.target.value;store()};
 document.querySelectorAll(".md input").forEach(i=>i.oninput=pv);
 document.querySelectorAll("#seg button").forEach(b=>b.onclick=()=>setRes(b.dataset.r));
 $("#cx").onclick=closeM;
