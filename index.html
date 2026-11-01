@@ -38,6 +38,27 @@ select{font:inherit;font-size:16px;color:var(--tx);background:#000;border:1px so
 .st h3{margin:0 0 6px;font-size:12px;color:var(--mut);text-transform:uppercase;letter-spacing:.6px}
 .sr{display:grid;grid-template-columns:1fr auto auto auto;gap:10px;font-size:12px;padding:4px 0;border-top:1px solid var(--line)}
 .eq{width:100%;height:110px;display:block}
+.app{display:flex;min-height:100vh}main.w{flex:1;min-width:0}
+#sb{width:190px;flex:none;background:#05070c;border-right:1px solid var(--line);border-radius:0 18px 18px 0;padding:16px 10px;display:flex;flex-direction:column;gap:6px;position:sticky;top:0;height:100vh;align-self:flex-start}
+#sb .lg{font-weight:800;letter-spacing:1px;margin-bottom:8px;background:linear-gradient(90deg,var(--b),var(--r));-webkit-background-clip:text;background-clip:text;color:transparent}
+#sb .sl{color:var(--mut);font-size:11px;margin-top:10px}
+#sb button{text-align:left;border-color:transparent;background:transparent}#sb button span{margin-right:8px}
+#sb button.on{border-color:var(--b);background:rgba(0,123,255,.15);box-shadow:0 0 14px rgba(0,123,255,.5)}
+#ml2{min-width:140px;text-align:center;font-weight:700;font-size:16px}
+textarea{font:inherit;font-size:16px;color:var(--tx);background:#000;border:1px solid var(--line);border-radius:8px;padding:8px;width:100%}
+.tw{overflow-x:auto}table{border-collapse:collapse;min-width:760px;width:100%;font-size:12px}
+th{color:var(--mut);text-align:left;font-weight:600;text-transform:uppercase;font-size:10px;padding:8px 6px;border-bottom:1px solid var(--b)}
+td{padding:7px 6px;border-bottom:1px solid var(--line)}tr[data-id]{cursor:pointer}tr[data-id]:hover{background:rgba(0,123,255,.08)}.tt td{font-weight:800;border-bottom:0}
+.fl{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px}.fl input,.fl select{width:auto;flex:1;min-width:110px}
+.kv{display:flex;justify-content:space-between;font-size:12px;padding:3px 0;border-top:1px solid var(--line)}
+.gr{float:right;border-radius:6px;padding:0 8px;font-size:13px}
+.gA,.gB{color:var(--b);border:1px solid var(--b);box-shadow:0 0 8px rgba(0,123,255,.6)}.gC,.gN{color:var(--mut);border:1px solid var(--line)}.gD{color:var(--r);border:1px solid var(--r);box-shadow:0 0 8px rgba(255,7,58,.6)}
+.st ul{margin:8px 0;padding-left:18px;font-size:12px;color:var(--mut)}.st a{color:var(--b);font-size:12px}.st .act{margin-top:8px}
+.cr{flex-direction:row;align-items:center;gap:8px;text-transform:none;font-size:13px;color:var(--tx);margin:2px 0}.cr input{width:auto}
+.al{border:1px solid var(--r);background:rgba(255,7,58,.12);color:var(--r);border-radius:10px;padding:8px 12px;margin-bottom:10px;box-shadow:0 0 14px rgba(255,7,58,.4)}
+.pb{height:8px;background:#182033;border-radius:6px;overflow:hidden}.pb i{display:block;height:100%;background:linear-gradient(90deg,var(--b),#4aa3ff);box-shadow:0 0 10px var(--b)}
+.hm{display:grid;grid-template-columns:70px repeat(5,1fr);gap:3px;font-size:11px;text-align:center}.hm span{padding:6px 2px;border-radius:6px}
+@media(max-width:700px){.app{display:block}#sb{position:fixed;top:auto;left:0;right:0;bottom:0;width:auto;height:auto;flex-direction:row;border-radius:16px 16px 0 0;border-right:0;border-top:1px solid var(--b);padding:6px 6px calc(env(safe-area-inset-bottom,0px) + 6px);gap:2px;z-index:10;justify-content:space-around}#sb .lg,#sb .sl{display:none}#sb button{flex:1;padding:6px 2px;font-size:10px;text-align:center}#sb button span{display:block;margin:0 0 2px;font-size:15px}main.w{padding-bottom:90px}}
 .cal{display:grid;grid-template-columns:repeat(7,1fr) 76px;gap:4px}
 .dh{color:var(--mut);font-size:11px;text-align:center;padding:4px 0;text-transform:uppercase}
 .c{min-height:96px;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:5px;cursor:pointer;display:flex;flex-direction:column;gap:4px;min-width:0}
@@ -76,18 +97,47 @@ input:focus{outline:none;border-color:var(--b);box-shadow:0 0 10px rgba(0,123,25
 </style>
 </head>
 <body>
-<div class="w">
+<div class="app"><aside id="sb"><div class="lg">◈ JOURNAL</div><small class="sl">Main Menu</small><button data-v="dash"><span>▦</span>Dashboard</button><button data-v="journal"><span>☰</span>Journal</button><button data-v="setups"><span>◎</span>Setups</button><button data-v="ana"><span>∿</span>Analytics</button><small class="sl">General</small><button data-v="set"><span>⚙</span>Réglages</button></aside><main class="w">
+<section id="v-dash">
 <header>
 <h1>JOURNAL DE TRADES</h1>
-<div class="nav"><button id="pm">‹</button><span id="ml"></span><button id="nm">›</button><button id="td">Aujourd’hui</button><button id="add" class="pri">+ Trade</button></div>
+<div class="nav"><button id="pm">‹</button><span id="ml"></span><button id="nm">›</button><button id="td">Aujourd’hui</button><select id="acs" style="width:auto"></select><button id="add" class="pri">+ Trade</button></div>
 </header>
+<div id="al"></div>
 <div class="rings" id="rings"></div>
 <div class="sum" id="sum"></div>
+<div id="gl"></div>
 <div class="opts"><label>Risque / trade ($) → P/L en $<input id="rk" inputmode="decimal" placeholder="ex. 100"></label><label>Positions<select id="ps"><option value="2">2 positions</option><option value="1">1 position</option></select></label></div>
 <div class="cal" id="cal"></div>
-<div class="stg" id="stg"></div>
+
 <p class="ft">R calculé : SL = −1R · BE = 0R · TP1 = RR1 · 2 positions : TP1+BE = RR1 ÷ 2, TP2 = (RR1 + RR2) ÷ 2 · 1 position : TP2 = RR2. Les trades sont enregistrés sur cet appareil.</p>
+</section>
+<section id="v-journal" hidden>
+<header><h1>JOURNAL</h1><div class="nav"><button id="add2" class="pri">+ Trade</button></div></header>
+<div class="fl"><input type="month" id="jm"><select id="jp"></select><select id="js"></select><select id="jr"><option value="">Résultat</option><option value="TP2">TP2</option><option value="BE">TP1+BE</option><option value="TP1">TP1</option><option value="B0">BE</option><option value="SL">SL</option></select></div>
+<div class="tw"><table id="jt"></table></div>
+</section>
+<section id="v-setups" hidden>
+<header><h1>SETUPS</h1></header>
+<div class="st" style="margin-bottom:12px"><h3>Nouveau / modifier un setup</h3><div class="fg"><label>Nom<input id="sn"></label><label>Image exemple (lien)<input id="si"></label></div><label>Règles (séparées par une virgule)<input id="sru"></label><div class="act"><button id="ssv" class="pri">Enregistrer</button></div></div>
+<div class="stg" id="scards"></div>
+</section>
+<section id="v-ana" hidden>
+<header><h1>ANALYTICS</h1><div class="nav"><button id="pm2">‹</button><span id="ml2"></span><button id="nm2">›</button></div></header>
+<div class="sum" id="asum"></div>
+<div class="stg" id="stg"></div>
+<div class="stg"><div class="st"><h3>Heatmap session × jour (R)</h3><div id="hm"></div></div><div class="st"><h3>Revue du mois</h3><textarea id="rv" rows="5" placeholder="Ce que j’ai bien fait, ce que je dois corriger…"></textarea></div></div>
+</section>
+<section id="v-set" hidden>
+<header><h1>RÉGLAGES</h1></header>
+<div class="stg">
+<div class="st"><h3>Risk management</h3><div class="fg"><label>Solde initial ($)<input id="sbal" inputmode="decimal"></label><label>Objectif mois (R)<input id="sgo" inputmode="decimal"></label><label>Perte max / jour (R)<input id="slm" inputmode="decimal"></label><label>Max trades / jour<input id="smx" inputmode="decimal"></label></div></div>
+<div class="st"><h3>Comptes</h3><label>Noms (séparés par une virgule)<input id="sac" placeholder="Réel, Démo"></label></div>
+<div class="st"><h3>Calculateur de lot</h3><div class="fg"><label>Entry<input id="le" inputmode="decimal"></label><label>SL<input id="ls" inputmode="decimal"></label><label>Valeur 1 point / lot ($)<input id="lv" value="100" inputmode="decimal"></label><label>Risque ($)<input id="lr" inputmode="decimal"></label></div><div class="pv" id="lo"></div></div>
+<div class="st"><h3>Sauvegarde JSON</h3><textarea id="bk" rows="5"></textarea><div class="act"><button id="bx">Exporter</button><button id="bi" class="pri">Importer</button></div></div>
 </div>
+</section>
+</main></div>
 
 <div class="ov" id="ov" hidden><div class="md">
 <h2 id="mt">Nouveau trade</h2>
@@ -102,9 +152,12 @@ input:focus{outline:none;border-color:var(--b);box-shadow:0 0 10px rgba(0,123,25
 <label>Setup<input id="fsu" list="sups" placeholder="OB, FVG…"></label>
 <label>Erreur<input id="fer" list="ers" placeholder="Aucune"></label>
 <label>Note<input id="fn"></label>
+<label>Compte<select id="fac"></select></label>
+<label>Émotion<select id="fem"><option>Calme</option><option>Confiant</option><option>FOMO</option><option>Peur</option><option>Revanche</option></select></label>
 <datalist id="sups"><option value="OB"><option value="FVG"><option value="Breaker"><option value="Mitigation"><option value="IFVG"><option value="Liquidity sweep"></datalist>
 <datalist id="ers"><option value="Aucune"><option value="FOMO"><option value="Revenge trade"><option value="SL déplacé"><option value="Entrée trop tôt"><option value="Hors plan"></datalist>
 </div>
+<div id="ck"></div>
 <div class="seg" id="seg"><button type="button" data-r="TP2">TP2</button><button type="button" data-r="BE">TP1+BE</button><button type="button" data-r="TP1">TP1</button><button type="button" data-r="B0">BE</button><button type="button" data-r="SL">SL</button></div>
 <label>Lien capture<input id="fl" placeholder="https://www.tradingview.com/x/…"></label>
 <div class="pv" id="pv"></div>
@@ -149,7 +202,7 @@ const chip=x=>{
 function render(){
   const y=cur.getFullYear(),m=cur.getMonth(),pre=y+"-"+String(m+1).padStart(2,"0");
   $("#ml").textContent=MO[m]+" "+y;
-  const all=T.map(t=>({t,c:calc(t)})).filter(x=>x.c&&!x.c.err);
+  const all=TF().map(t=>({t,c:calc(t)})).filter(x=>x.c&&!x.c.err);
   const by={};all.forEach(x=>(by[x.t.date]=by[x.t.date]||[]).push(x));
   const M=all.filter(x=>x.t.date.startsWith(pre));
   const n=M.length,w=M.filter(x=>x.c.R>0).length,sum=M.reduce((a,x)=>a+x.c.R,0);
@@ -184,7 +237,7 @@ function stats(M,sum,gp,gl,w,n){
   const mx=Math.max(...P,0),mn=Math.min(...P,0),sp=(mx-mn)||1,Y=v=>6+(mx-v)/sp*88,col=P[P.length-1]>=0?B:R;
   const pts=P.map((v,i)=>(P.length>1?i*300/(P.length-1):0).toFixed(1)+","+Y(v).toFixed(1)).join(" ");
   const eq=n?`<svg class="eq" viewBox="0 0 300 100" preserveAspectRatio="none"><line x1="0" x2="300" y1="${Y(0)}" y2="${Y(0)}" stroke="#2a3350" stroke-dasharray="3 3"/><polyline points="${pts}" fill="none" stroke="${col}" stroke-width="2" vector-effect="non-scaling-stroke" style="filter:drop-shadow(0 0 3px ${col})"/></svg>`:`<span style="color:var(--mut);font-size:12px">—</span>`;
-  $("#stg").innerHTML=`<div class="st"><h3>Courbe de R · ${fR(P[P.length-1])}</h3>${eq}</div><div class="st"><h3>Par session</h3>${g(x=>x.t.ses,SS)}</div><div class="st"><h3>Par jour</h3>${g(x=>DN[new Date(x.t.date+"T00:00").getDay()],DS)}</div><div class="st"><h3>Par setup</h3>${g(x=>x.t.setup)}</div><div class="st"><h3>Erreurs</h3>${g(x=>x.t.err&&!/^aucune$/i.test(x.t.err)?x.t.err:null)}</div>`;
+  ana(M);$("#stg").innerHTML=`<div class="st"><h3>Courbe de R · ${fR(P[P.length-1])}</h3>${eq}</div><div class="st"><h3>Par session</h3>${g(x=>x.t.ses,SS)}</div><div class="st"><h3>Par jour</h3>${g(x=>DN[new Date(x.t.date+"T00:00").getDay()],DS)}</div><div class="st"><h3>Par setup</h3>${g(x=>x.t.setup)}</div><div class="st"><h3>Erreurs</h3>${g(x=>x.t.err&&!/^aucune$/i.test(x.t.err)?x.t.err:null)}</div><div class="st"><h3>Émotions</h3>${g(x=>x.t.emo)}</div>`;
 }
 function read(){return{date:$("#fd").value,pair:$("#fp").value.trim().toUpperCase()||"—",entry:num($("#fe").value),sl:num($("#fs").value),tp1:num($("#f1").value),tp2:num($("#f2").value),res,link:$("#fl").value.trim(),pos:tpos,ses:$("#fss").value,setup:$("#fsu").value.trim(),err:$("#fer").value.trim(),note:$("#fn").value.trim()}}
 function pv(){
@@ -236,6 +289,75 @@ $("#del").onclick=()=>{
   if(!delArm){delArm=true;$("#del").textContent="Confirmer ?";return}
   T=T.filter(x=>x.id!==editId);store();closeM();render();
 };
+const lg=k=>{try{return localStorage.getItem(k)}catch(e){return null}},ls=(k,v)=>{try{localStorage.setItem(k,v)}catch(e){}},jp=(k,d)=>{try{return JSON.parse(lg(k))||d}catch(e){return d}};
+let CF=Object.assign({bal:0,goal:0,lim:0,max:0,ac:"Principal"},jp("jt.cf",{})),acc="Tous",view="dash";
+let S=jp("jt.set",[{name:"OB M15",rules:["Biais HTF","Zone M15","Confirmation M1/M3","RR ≥ 2"],img:""},{name:"FVG",rules:["Biais HTF","FVG propre","RR ≥ 2"],img:""},{name:"Breaker",rules:["Biais HTF","Cassure confirmée","RR ≥ 2"],img:""}]);
+const sv=()=>{ls("jt.cf",JSON.stringify(CF));ls("jt.set",JSON.stringify(S))};
+const ACS=()=>(CF.ac||"Principal").split(",").map(s=>s.trim()).filter(Boolean);
+function TF(){return T.filter(t=>acc==="Tous"||(t.acc||ACS()[0])===acc)}
+const valid=()=>TF().map(t=>({t,c:calc(t)})).filter(x=>x.c&&!x.c.err);
+const byD=(a,b)=>a.t.date<b.t.date?-1:a.t.date>b.t.date?1:0;
+const sumR=L=>L.reduce((a,x)=>a+x.c.R,0);
+function show(v){view=v;document.querySelectorAll("main > section").forEach(s=>s.hidden=s.id!=="v-"+v);document.querySelectorAll("#sb button").forEach(b=>b.classList.toggle("on",b.dataset.v===v));render()}
+document.querySelectorAll("#sb button").forEach(b=>b.onclick=()=>show(b.dataset.v));
+$("#acs").onchange=e=>{acc=e.target.value;render()};
+$("#add2").onclick=()=>openM(iso(new Date()));
+$("#pm2").onclick=()=>$("#pm").click();$("#nm2").onclick=()=>$("#nm").click();
+const _r=read;read=()=>Object.assign(_r(),{acc:$("#fac").value,emo:$("#fem").value,cks:[...document.querySelectorAll("#ck input:checked")].map(i=>+i.dataset.i),of:document.querySelectorAll("#ck input").length,ok:document.querySelectorAll("#ck input:checked").length});
+function ckr(pre){const sd=S.find(s=>s.name===$("#fsu").value.trim());$("#ck").innerHTML=sd&&sd.rules.length?sd.rules.map((r,i)=>`<label class="cr"><input type="checkbox" data-i="${i}"${pre&&pre.includes(i)?" checked":""}>${esc(r)}</label>`).join(""):""}
+$("#fsu").addEventListener("input",()=>ckr(null));
+const _o=openM;openM=(d,id)=>{_o(d,id);const t=id?T.find(x=>x.id===id):null;$("#fac").innerHTML=ACS().map(a=>`<option>${esc(a)}</option>`).join("");$("#fac").value=t?(t.acc||ACS()[0]):(acc!=="Tous"?acc:ACS()[0]);$("#fem").value=t&&t.emo?t.emo:"Calme";$("#sups").innerHTML=S.map(s=>`<option value="${esc(s.name)}">`).join("");ckr(t&&t.cks)};
+function jr(){
+ const V=valid().sort((a,b)=>-byD(a,b)),sel=(id,vals,ph)=>{const c=$(id).value;$(id).innerHTML=`<option value="">${ph}</option>`+vals.map(v=>`<option${v===c?" selected":""}>${esc(v)}</option>`).join("")};
+ sel("#jp",[...new Set(V.map(x=>x.t.pair))],"Paire");sel("#js",[...new Set(V.map(x=>x.t.setup).filter(Boolean))],"Setup");
+ const m=$("#jm").value,p=$("#jp").value,s=$("#js").value,r=$("#jr").value;
+ const L=V.filter(x=>(!m||x.t.date.startsWith(m))&&(!p||x.t.pair===p)&&(!s||x.t.setup===s)&&(!r||x.t.res===r));
+ $("#jt").innerHTML=`<tr>${["Date","Paire","Side","Entry","SL","TP2","RR","Rés.","R","$","Setup"].map(h=>`<th>${h}</th>`).join("")}</tr>`+L.map(x=>{const t=x.t,c=x.c,k=c.R>0?"bl":c.R<0?"rd":"";return `<tr data-id="${t.id}"><td>${t.date}</td><td>${esc(t.pair)}</td><td>${c.dir}</td><td>${t.entry}</td><td>${t.sl}</td><td>${t.tp2!=null?t.tp2:t.tp1}</td><td>1:${c.rr2.toFixed(1)}</td><td>${LB[t.res]}</td><td class="${k}">${fR(c.R)}</td><td class="${k}">${risk?fD(c.R*risk):"—"}</td><td>${esc(t.setup||"")}</td></tr>`}).join("")+`<tr class="tt"><td colspan="8">${L.length} trades</td><td>${fR(sumR(L))}</td><td>${risk?fD(sumR(L)*risk):"—"}</td><td></td></tr>`;
+}
+["#jm","#jp","#js","#jr"].forEach(i=>$(i).onchange=jr);
+$("#jt").onclick=e=>{const r=e.target.closest("tr[data-id]");if(r)openM(null,r.dataset.id)};
+function sp(){
+ const M=valid(),names=[...new Set(S.map(s=>s.name).concat(M.map(x=>x.t.setup).filter(Boolean)))];
+ $("#scards").innerHTML=names.map(nm=>{
+  const L=M.filter(x=>x.t.setup===nm),n=L.length,sr=sumR(L),ex=n?sr/n:0,w=L.filter(x=>x.c.R>0).length;
+  const gp=L.filter(x=>x.c.R>0).reduce((a,x)=>a+x.c.R,0),gl=-L.filter(x=>x.c.R<0).reduce((a,x)=>a+x.c.R,0);
+  const gr=n<5?"—":ex>=.5?"A":ex>=.2?"B":ex>=0?"C":"D",sd=S.find(s=>s.name===nm),i=S.indexOf(sd);
+  const kv=(a,b)=>`<div class="kv"><span>${a}</span><b>${b}</b></div>`;
+  return `<div class="st"><h3>${esc(nm)} <b class="gr g${gr==="—"?"N":gr}">${gr}</b></h3>${kv("Trades",n)}${kv("Win rate",n?Math.round(w/n*100)+"%":"—")}${kv("Expectancy",fR(ex))}${kv("Total R",fR(sr))}${kv("Profit factor",gl>0?(gp/gl).toFixed(2):gp>0?"∞":"—")}${sd&&sd.rules.length?`<ul>${sd.rules.map(r=>`<li>${esc(r)}</li>`).join("")}</ul>`:""}${sd&&/^https?:\/\//i.test(sd.img||"")?`<a href="${esc(sd.img)}" target="_blank" rel="noopener">↗ exemple</a>`:""}${sd?`<div class="act"><button data-e="${i}">Modifier</button><button data-x="${i}">Supprimer</button></div>`:""}</div>`}).join("")||"<p>—</p>";
+}
+let se=-1;
+$("#ssv").onclick=()=>{const nm=$("#sn").value.trim();if(!nm)return;const o={name:nm,rules:$("#sru").value.split(",").map(s=>s.trim()).filter(Boolean),img:$("#si").value.trim()};if(se>=0)S[se]=o;else S.push(o);se=-1;["#sn","#sru","#si"].forEach(i=>$(i).value="");sv();sp()};
+$("#scards").onclick=e=>{const b=e.target.closest("button");if(!b)return;if(b.dataset.e!=null){se=+b.dataset.e;const s=S[se];$("#sn").value=s.name;$("#sru").value=s.rules.join(", ");$("#si").value=s.img||"";window.scrollTo(0,0)}else if(b.dataset.x!=null){if(!b.dataset.arm){b.dataset.arm=1;b.textContent="Confirmer ?";return}S.splice(+b.dataset.x,1);sv();sp()}};
+function ana(M){
+ const Rs=[...M].sort(byD).map(x=>x.c.R),W=Rs.filter(r=>r>0),Lo=Rs.filter(r=>r<0),av=a=>a.length?a.reduce((p,c)=>p+c,0)/a.length:0,n=Rs.length;
+ let cum=0,pk=0,dd=0,sw=0,sl=0,cw=0,cl=0;
+ Rs.forEach(r=>{cum+=r;pk=Math.max(pk,cum);dd=Math.min(dd,cum-pk);if(r>0){cw++;cl=0}else if(r<0){cl++;cw=0}else{cw=cl=0}sw=Math.max(sw,cw);sl=Math.max(sl,cl)});
+ const ck=M.filter(x=>x.t.of>0),dis=ck.length?Math.round(ck.filter(x=>x.t.ok===x.t.of).length/ck.length*100)+"%":"—";
+ const K=(l,v,c="")=>`<div class="k"><small>${l}</small><b class="${c}">${v}</b></div>`;
+ $("#asum").innerHTML=K("Expectancy",n?fR(av(Rs)):"—",av(Rs)>=0?"bl":"rd")+K("Max drawdown",fR(dd),"rd")+K("Avg win",fR(av(W)),"bl")+K("Avg loss",fR(av(Lo)),"rd")+K("Best trade",n?fR(Math.max(...Rs)):"—","bl")+K("Worst trade",n?fR(Math.min(...Rs)):"—","rd")+K("Série gains",sw,"bl")+K("Série pertes",sl,"rd")+K("Discipline",dis);
+ const SN=["Asie","Londres","New York"],DD=["Lun","Mar","Mer","Jeu","Ven"],DN2=["Dim","Lun","Mar","Mer","Jeu","Ven","Sam"];
+ let h=`<div class="hm"><span></span>${DD.map(d=>`<span>${d}</span>`).join("")}`;
+ SN.forEach(s=>{h+=`<span>${s}</span>`;DD.forEach(d=>{const L=M.filter(x=>x.t.ses===s&&DN2[new Date(x.t.date+"T00:00").getDay()]===d),r=sumR(L);h+=L.length?`<span style="background:rgba(${r>=0?"0,123,255":"255,7,58"},${Math.min(.85,Math.abs(r)/3+.2)})">${fR(r)}</span>`:"<span></span>"})});
+ $("#hm").innerHTML=h+"</div>";
+ $("#ml2").textContent=$("#ml").textContent;
+ const rk="jt.rev."+cur.getFullYear()+"-"+cur.getMonth();$("#rv").value=lg(rk)||"";$("#rv").oninput=e=>ls(rk,e.target.value);
+}
+function extra(){
+ $("#acs").innerHTML=["Tous"].concat(ACS()).map(a=>`<option${a===acc?" selected":""}>${esc(a)}</option>`).join("");
+ const V=valid(),td=iso(new Date()),T0=V.filter(x=>x.t.date===td),tr=sumR(T0);
+ $("#al").innerHTML=(CF.max&&T0.length>=CF.max)||(CF.lim&&tr<=-CF.lim)?`<div class="al">⚠ Limite du jour atteinte — stop trading (${T0.length} trades · ${fR(tr)})</div>`:"";
+ const pre=cur.getFullYear()+"-"+String(cur.getMonth()+1).padStart(2,"0"),mr=sumR(V.filter(x=>x.t.date.startsWith(pre)));
+ $("#gl").innerHTML=(CF.goal?`<div class="st" style="margin-bottom:12px"><h3>Objectif du mois · ${fR(mr)} / ${CF.goal}R</h3><div class="pb"><i style="width:${Math.max(0,Math.min(100,mr/CF.goal*100))}%"></i></div></div>`:"")+(CF.bal&&risk?`<div class="k" style="margin-bottom:12px"><small>Equity</small><b class="bl">$${Math.round(CF.bal+sumR(V)*risk).toLocaleString("en-US")}</b></div>`:"");
+ if(view==="journal")jr();if(view==="setups")sp();
+}
+const _rn=render;render=()=>{_rn();extra()};
+[["#sbal","bal"],["#sgo","goal"],["#slm","lim"],["#smx","max"]].forEach(([i,k])=>{$(i).value=CF[k]||"";$(i).onchange=e=>{CF[k]=num(e.target.value)||0;sv();render()}});
+$("#sac").value=CF.ac;$("#sac").onchange=e=>{CF.ac=e.target.value.trim()||"Principal";if(!ACS().includes(acc))acc="Tous";sv();render()};
+function lot(){const e=num($("#le").value),s=num($("#ls").value),v=num($("#lv").value),r=num($("#lr").value)||risk;$("#lo").innerHTML=e!=null&&s!=null&&e!==s&&v&&r?`Lot : <b class="bl">${(r/(Math.abs(e-s)*v)).toFixed(2)}</b> · distance ${Math.abs(e-s).toFixed(2)} · risque $${r}`:`<span style="color:var(--mut)">Entre Entry, SL et risque ($).</span>`}
+["#le","#ls","#lv","#lr"].forEach(i=>$(i).oninput=lot);lot();
+$("#bx").onclick=()=>{$("#bk").value=JSON.stringify({T,risk,pos,CF,S})};
+let ia=0;$("#bi").onclick=()=>{if(!ia){ia=1;$("#bi").textContent="Confirmer ?";return}ia=0;$("#bi").textContent="Importer";try{const d=JSON.parse($("#bk").value);T=d.T||[];risk=d.risk||0;pos=d.pos||2;CF=Object.assign(CF,d.CF||{});S=d.S||S;store();sv();render()}catch(e){$("#bk").value="JSON invalide"}};
+show("dash");
 render();
 </script>
 </body>
